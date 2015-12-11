@@ -1,0 +1,24 @@
+{
+  "name": "webcomponents-lite",
+  "main": "webcomponents-lite.js",
+  "version": "0.6.0",
+  "homepage": "http://webcomponents.org",
+  "authors": [
+    "The Polymer Authors"
+  ],
+  "keywords": [
+    "webcomponents"
+  ],
+  "license": "BSD",
+  "ignore": [],
+  "_release": "0.6.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.0",
+    "commit": "a1c429930a3d1fbe71a63c9efb178fbe8e385af7"
+  },
+  "_source": "git://github.com/webcomponents/webcomponents-lite.git",
+  "_target": "~0.6.0",
+  "_originalSource": "webcomponents/webcomponents-lite",
+  "_direct": true
+}
