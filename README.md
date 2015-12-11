@@ -2,14 +2,14 @@
 
 <img src="http://i.imgur.com/I9HurIz.png"></img>
 
-Working with them are very easy.
+Type following:
 
 ```bash
 mkdir next && cd next
 bower i --save daviddao/x-bio-pv
 ```
 
-Create a minimal index.html:
+Create a minimal index.html inside the folder:
 
 ```html
 <!DOCTYPE html>
@@ -28,5 +28,5 @@ Create a minimal index.html:
 </html>
 
 ```
-
-Data Binding Example: http://biojs.github.io/next-example/
+You are done.
+A slightly more advanced Data Binding Example: http://biojs.github.io/next-example/
