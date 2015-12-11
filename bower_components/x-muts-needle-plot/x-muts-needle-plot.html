@@ -1,0 +1,270 @@
+<!--
+@license
+-->
+<link rel="import" href="../polymer/polymer.html">
+<script src="js/d3.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/d3-svg-legend.js"></script>
+<script src="js/muts-needle-plot.js"></script>
+<!--
+<img src="http://i.imgur.com/I9HurIz.png"/>
+
+<h1 style="float:left">x-muts-needle-plot</h1>
+<br>
+<br>
+<br>
+<br>
+
+Example:
+
+    <x-muts-needle-plot x-legend="TP53 Amino Acid sequence (ENST00000269305)" y-legend="# of mutations in TP53 in ovarian cancer">
+      <x-muts-needle-plot-region name="P53" coord="120-300"></x-muts-needle-plot-region>
+      <x-muts-needle-plot-region name="GENE2" coord="20-100"></x-muts-needle-plot-region>
+    </x-muts-needle-plot>
+
+
+<img src="http://i.imgur.com/UPPgUHM.png" width="300px"></img>
+
+@group next Elements
+@element x-muts-needle-plot
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="x-muts-needle-plot">
+    <template>
+        <style>
+        :host {
+            display: block;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Verdana, Geneva, sans-serif;
+        }
+        /* brush selection */
+        
+        .selected {
+            fill: lightblue;
+            stroke-width: 4;
+        }
+        /* figure legend */
+        
+        .breakLabels.nomuts {
+            font-weight: normal;
+            opacity: 0.3;
+        }
+        
+        .noshow {
+            opacity: 0.1;
+        }
+        
+        .regionGroup:hover > text {
+            fill: black;
+            font-weight: bold;
+            opacity: 1;
+        }
+        
+        .regionGroup:hover > rect {
+            stroke-width: 4;
+        }
+        
+        .repeatedName.noshow {
+            fill: black;
+            opacity: 0;
+        }
+        
+        .d3-tip {
+            line-height: 1;
+            font-size: 11px;
+            color: black;
+            font-weight: bold;
+            padding: 10px;
+            background: rgba(240, 240, 240, 0.8);
+            border-width: 1px;
+            border-color: rgba(190, 190, 190, 1);
+            border-radius: 6px;
+        }
+        
+        .d3-tip-selection {
+            font-size: 12px;
+            text-align: center;
+        }
+        /* Creates a small triangle extender for the tooltip */
+        
+        .d3-tip:after {
+            box-sizing: border-box;
+            display: inline;
+            font-size: 10px;
+            width: 100%;
+            line-height: 1;
+            color: rgba(0, 0, 0, 0.6);
+            content: "\25BC";
+            position: absolute;
+            text-align: center;
+        }
+        /* Style northward tooltips differently */
+        
+        .d3-tip.n:after {
+            margin: -1px 0 0 0;
+            top: 100%;
+            left: 0;
+        }
+        </style>
+        <content id="muts-regions" select="x-muts-needle-plot-region"></content>
+    </template>
+</dom-module>
+<script>
+Polymer({
+
+    is: 'x-muts-needle-plot',
+
+    properties: {
+        /**
+         * x-legend describes the legend for x axis
+         *
+         * @type String
+         */
+        xLegend: {
+            type: String,
+            value: function() {
+                return "x-axis";
+            }
+        },
+        /**
+         * y-legend describes the legend for y axis
+         *
+         * @type String
+         */
+        yLegend: {
+            type: String,
+            value: function() {
+                return "y-axis";
+            }
+        },
+        /**
+         * mutation-data provides a url to a mutation data file
+         *
+         * @type String
+         */
+        mutationData: {
+            type: String,
+            notify: true,
+            value: function() {
+                return "https://cdn.rawgit.com/bbglab/muts-needle-plot/master/snippets/data/TP53_MUTATIONS.json";
+            }
+        },
+        /**
+         * `width` The width (in pixels) of the viewer. Defaults to 600.
+         */
+        width: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 600;
+            }
+        },
+        /**
+         * `height` The height (in pixels) of the viewer. Defaults to 400.
+         */
+        height: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 400;
+            }
+        },
+        /**
+         * `max-coord` maximal coordinate
+         */
+        maxCoord: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 500;
+            }
+        },
+        /**
+         * `min-coord` minimal coordinate
+         */
+        minCoord: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 0;
+            }
+        }
+
+    },
+
+    // Element Lifecycle
+
+    ready: function() {
+        // `ready` is called after all elements have been configured, but
+        // propagates bottom-up. This element's children are ready, but parents
+        // are not.
+        //
+        // This is the point where you should make modifications to the DOM (when
+        // necessary), or kick off any processes the element wants to perform.
+    },
+
+    attached: function() {
+        // `attached` fires once the element and its parents have been inserted
+        // into a document.
+        //
+        // This is a good place to perform any work related to your element's
+        // visual state or active behavior (measuring sizes, beginning animations,
+        // loading resources, etc).
+        var mutneedles = require("muts-needle-plot");
+
+        var parent = document.createElement('div');
+        Polymer.dom(this.root).appendChild(parent);
+
+        var legends = {
+            x: this.xLegend,
+            y: this.yLegend
+        }
+
+        // Get the child nodes and create a plot
+        var regions = this.getContentChildNodes('#muts-regions')
+        var regionData = []; // prepare json
+        for (var i = 0; i < regions.length; i++) {
+            var p = {
+                "name": regions[i].name,
+                "coord": regions[i].coord
+            };
+            regionData.push(p);
+        }
+
+        var plotConfig = {
+            maxCoord: this.maxCoord,
+            minCoord: this.minCoord,
+            targetElement: parent,
+            mutationData: this.mutationData,
+            regionData: regionData,
+            //colorMap: colorMap,
+            legends: legends,
+            width: this.width,
+            height: this.height
+        }
+
+        this.instance = new mutneedles(plotConfig);
+
+    },
+
+    detached: function() {
+        // The analog to `attached`, `detached` fires when the element has been
+        // removed from a document.
+        //
+        // Use this to clean up anything you did in `attached`.
+    },
+
+    // Element Behavior
+    /**
+     * Returns the mutsneedles API object
+     **/
+    getMutsneedles: function() {
+        return this.instance;
+    }
+
+});
+</script>

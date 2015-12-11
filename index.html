@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BioJS Next Example</title>
+    <link rel="import" href="bower_components/x-bio-pv/x-bio-pv.html">
+    <!-- <link rel="import" href="bower_components/x-muts-needle-plot/x-muts-needle-plot.html">
+    <link rel="import" href="bower_components/x-muts-needle-plot/x-muts-needle-plot-region.html"> -->
+</head>
+
+<body>
+    <template is="dom-bind">
+        Input your PDB id (i.e 4oo9): <input value="{{pdb::change}}">
+        <br>
+        <x-bio-pv style="float:left" id="pdb" pdb-id="{{pdb}}" background="#fafafa" fog antialias outline color="bySS"></x-bio-pv>
+        <x-bio-pv style="float:left" id="pdb" pdb-id="{{pdb}}" background="white" spin fog antialias outline color="byElement"></x-bio-pv>
+        <x-bio-pv style="float:left" id="pdb" pdb-id="{{pdb}}" antialias outline render="lineTrace"></x-bio-pv>
+    </template>
+    <!-- <x-muts-needle-plot width="700px">
+        <x-muts-needle-plot-region coord="100-300" name="BroadGene"></x-muts-needle-plot-region>
+        <x-muts-needle-plot-region coord="50-90" name="Genetec"></x-muts-needle-plot-region>
+    </x-muts-needle-plot> -->
+</body>
+
+</html>

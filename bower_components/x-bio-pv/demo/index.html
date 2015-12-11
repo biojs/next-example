@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+@license
+-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>x-bio-pv Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../x-bio-pv.html">
+</head>
+
+<body unresolved>
+    <p>An example of <code>&lt;x-bio-pv&gt;</code>:</p>
+    <p>Dynamically switch pdb file: <br>
+        <button id="changeBtn">Display 1ZQA PDB in balls and sticks!</button>
+    </p>
+    <template is="dom-bind">
+    Choose your own PDB id: <br>
+    <input type="text" value="{{pdb::change}}">
+
+    <div style="margin-left:10%;">
+    <x-bio-pv id="pdb" background="#fafafa" fog antialias pdb-id="{{pdb}}" outline spin></x-bio-pv>
+    </div>
+    </template>
+
+    <script>
+    var seedElement = document.querySelector('x-bio-pv');
+
+    document.querySelector('#changeBtn').addEventListener('click', function() {
+          document.getElementById("pdb").setAttribute("pdb-id","1ZQA");
+          document.getElementById("pdb").setAttribute("color","bySS");
+          document.getElementById("pdb").setAttribute("render","ballsAndSticks");
+
+    });
+    </script>
+</body>
+
+</html>

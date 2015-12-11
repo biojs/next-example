@@ -1,0 +1,55 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <x-muts-needle-plot-region></x-muts-needle-plot-region>
+
+@group next Elements
+@element x-muts-needle-plot-region
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="x-muts-needle-plot-region">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+    </style>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'x-muts-needle-plot-region',
+
+    properties: {
+
+      /**
+       * Saves the name of the region
+       */
+      name: String,
+
+      /**
+       * Gives the coordinates of the region
+       */
+      coord: String,
+
+    }
+
+  });
+
+</script>

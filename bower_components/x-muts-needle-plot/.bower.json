@@ -1,0 +1,35 @@
+{
+  "name": "x-muts-needle-plot",
+  "version": "0.0.1",
+  "authors": [
+    "David Dao <contact.daviddao@gmail.com>"
+  ],
+  "description": "BioJS next web component wrapper for x-muts-needle-plot",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "x-muts-needle-plot.html",
+  "homepage": "https://github.com/daviddao/x-muts-needle-plot/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
+  },
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.1",
+    "commit": "ac65c7455970e8046feae5fec6c569b209c37c07"
+  },
+  "_source": "git://github.com/daviddao/x-muts-needle-plot.git",
+  "_target": "~0.0.1",
+  "_originalSource": "daviddao/x-muts-needle-plot",
+  "_direct": true
+}

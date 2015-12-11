@@ -1,0 +1,38 @@
+{
+  "name": "x-bio-pv",
+  "version": "0.0.1",
+  "authors": [
+    "Anonymous <contact.daviddao@gmail.com>"
+  ],
+  "description": "web component wrapper for bio-pv",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "bio-pv",
+    "biojs",
+    "next"
+  ],
+  "main": "x-bio-pv.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/daviddao/x-bio-pv/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"
+  },
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.1",
+    "commit": "f574e9d13595a51a737c2ed55703f134a624713b"
+  },
+  "_source": "git://github.com/daviddao/x-bio-pv.git",
+  "_target": "~0.0.1",
+  "_originalSource": "daviddao/x-bio-pv",
+  "_direct": true
+}

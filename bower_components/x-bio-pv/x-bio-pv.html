@@ -1,0 +1,363 @@
+<!--
+@license
+-->
+<link rel="import" href="../polymer/polymer.html">
+<script src="js/bio-pv.js"></script>
+<!--
+<img src="http://i.imgur.com/I9HurIz.png"/>
+
+<h1 style="float:left">x-bio-pv</h1>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+Example:
+
+    <x-bio-pv pdb-id="4oo8" style="cartoon" color="ssSuccession" spin outline antialias></x-bio-pv>
+
+<img src="http://i.imgur.com/1cE2pDh.png" width="250px"></img>
+
+@group Next Elements
+@element x-bio-pv
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="x-bio-pv">
+    <template>
+        <style>
+        :host {
+            display: block;
+            box-sizing: border-box;
+        }
+        </style>
+        <content></content>
+    </template>
+</dom-module>
+<script>
+Polymer({
+
+    is: 'x-bio-pv',
+
+    properties: {
+
+        /**
+         * `width` The width (in pixels) of the viewer. The special value ‘auto’ can be used to set the width to the width of the parent element. Defaults to 500.
+         */
+        width: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 500;
+            }
+        },
+        /**
+         * `height` The height (in pixels) of the viewer. The special value ‘auto’ can be used to set the height to the height of the parent element. Defaults to 500.
+         */
+        height: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 500;
+            }
+        },
+        /**
+         * `antialias` whether full-scene antialiasing should be enabled. When available, antialiasing will use the built-in WebGL antialiasing. When not, it will fall back to a manual supersampling of the scene. Enabling antialiasing improve the visual results considerably, but also slows down rendering. When rendering speed is a concern, the antialias option should be set to false. Defaults to false.
+         */
+        antialias: {
+            type: Boolean,
+            notify: true,
+            value: function() {
+                return false;
+            }
+        },
+        /**
+         * `quality` the level of detail for the geometry. Accepted values are low, medium, and high. Defaults to low.
+         */
+        quality: {
+            type: String,
+            notify: true,
+            value: function() {
+                return 'low';
+            }
+        },
+        /**
+         * `background` set the default background color of the viewer. Defaults to ‘white’. See Color Notations
+         */
+        background: {
+            type: String,
+            notify: true,
+            value: function() {
+                return 'white';
+            }
+        },
+        /**
+         * `animateTime` controls the default animation duration in milliseconds. By default, the animation is set to 0 (no animation). By setting it to higher values, rotation, zoom and shift are animated. Note that enabling this can have negative impact on performance, especially with large molecules and on low-end devices.
+         */
+        animateTime: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 0;
+            }
+        },
+        /**
+         * `fog` whether depth-cue (‘fog’) should be enabled. By default, fog is enabled. Pass false to disable fog.
+         */
+        fog: {
+            type: Boolean,
+            notify: true,
+            value: function() {
+                return false;
+            }
+        },
+        /**
+         * `fov` the field of view in degrees. Default is 45 degrees.
+         */
+        fov: {
+            type: Number,
+            notify: true,
+            value: function() {
+                return 45;
+            }
+        },
+        /**
+         * `outline` whether outline rendering should be enabled. When enabled, outline rendering draws a uniformly colored outline around the mesh geometries to improve contrast. By default outline rendering is enabled.
+         */
+        outline: {
+            type: Boolean,
+            notify: true,
+            value: function() {
+                return false;
+            }
+        },
+        /**
+         * `spin` whether the molecule spins. By default spin is set to true.
+         */
+        spin: {
+            type: Boolean,
+            notify: true,
+            value: function() {
+                return false;
+            }
+        },
+        /**
+         * `color` indicates which coloring method to use. 
+         * Possible values are: "byChain", "bySS", "rainbow", "uniform", "byElement" or "ssSuccession"
+         * Default is "ssSuccession".
+         **/
+        color: {
+            type: String,
+            notify: true,
+            value: function() {
+                return "ssSuccession";
+            }
+        },
+        /**
+         * `render` indicates which render-style to use. 
+         * Possible values are ‘sline’, ‘lines’, ‘trace’, ‘lineTrace’, ‘cartoon’, ‘tube’, ‘spheres’, ballsAndSticks’
+         * Default is "cartoon".
+         **/
+        render: {
+            type: String,
+            notify: true,
+            value: function() {
+                return "cartoon";
+            }
+        },
+        /**
+         * `pdbId` id to a pdb file in rcsb
+         */
+        pdbId: {
+            type: String,
+            notify: true,
+            value: function() {
+                return "4oo8";
+            },
+            observer: 'load'
+        }
+    },
+
+    // Element Lifecycle
+
+    ready: function() {
+        // `ready` is called after all elements have been configured, but
+        // propagates bottom-up. This element's children are ready, but parents
+        // are not.
+        //
+        // This is the point where you should make modifications to the DOM (when
+        // necessary), or kick off any processes the element wants to perform.
+    },
+
+    attached: function() {
+        // `attached` fires once the element and its parents have been inserted
+        // into a document.
+        //
+        // This is a good place to perform any work related to your element's
+        // visual state or active behavior (measuring sizes, beginning animations,
+        // loading resources, etc).
+
+        var parent = document.createElement('div');
+        Polymer.dom(this.root).appendChild(parent);
+
+        this.pv = require("bio-pv");
+        var that = this;
+        var pv = this.pv;
+
+        // viewer
+        this.viewer = pv.Viewer(parent, {
+            quality: this.quality,
+            width: this.width,
+            height: this.height,
+            antialias: this.antialias,
+            outline: this.outline,
+            animateTime: this.animateTime,
+            background: this.background,
+            fog: this.fog,
+            fov: this.fov
+
+        });
+
+        var viewer = this.viewer; // syntactic sugar
+        var pv = this.pv;
+
+        // distance measurement
+        var lastAtom = null;
+
+        // register click handler that does all the distance-measure-foo
+        viewer.addListener('click', function(picked) {
+            if (picked === null) return;
+            var target = picked.target();
+            if (target.qualifiedName === undefined) {
+                return;
+            }
+            var node = picked.node();
+            var view = node.structure().createEmptyView();
+            if (lastAtom !== null) {
+                // remove distance-related objects from previous distance
+                // measurements.
+                viewer.rm('dist.*');
+                var g = viewer.customMesh('dist.line');
+                var midPoint = pv.vec3.clone(lastAtom.pos());
+                pv.vec3.add(midPoint, midPoint, target.pos());
+                pv.vec3.scale(midPoint, midPoint, 0.5);
+                // add a tube to connect the two atoms
+                g.addTube(lastAtom.pos(), target.pos(), 0.1, {
+                    cap: true,
+                    color: 'black'
+                });
+                var d = pv.vec3.distance(lastAtom.pos(), target.pos());
+                var l = viewer.label('dist.label', d.toFixed(2), midPoint);
+                lastAtom = null;
+            } else {
+                lastAtom = target;
+                view.addAtom(target);
+            }
+            node.setSelection(view);
+            viewer.requestRedraw();
+        });
+
+        // Initial load
+        function load() {
+            viewer.clear()
+
+            pv.io.fetchPdb('http://www.rcsb.org/pdb/files/' + that.pdbId + '.pdb', function(structure) {
+                // render everything as helix/sheet/coil cartoon, coloring by secondary 
+                // structure succession
+                var go = viewer.renderAs('structure', structure, that.render, {
+                    color: that._color(),
+                    showRelated: '1',
+                });
+
+                // find camera orientation such that the molecules biggest extents are 
+                // aligned to the screen plane.
+                var rotation = pv.viewpoint.principalAxes(go);
+                viewer.setRotation(rotation)
+                viewer.spin(that.spin)
+
+                // adapt zoom level to contain the whole structure
+                viewer.autoZoom()
+            });
+        }
+
+        // load default
+        viewer.on('viewerReady', load);
+    },
+
+    detached: function() {
+        // The analog to `attached`, `detached` fires when the element has been
+        // removed from a document.
+        //
+        // Use this to clean up anything you did in `attached`.
+    },
+    /**
+     * Load PDB file and display it
+     *
+     * @param {string}
+     **/
+    load: function(pdbId) {
+        // Check if viewer exists
+        if (this.viewer !== undefined) {
+            var viewer = this.viewer;
+            var pv = this.pv;
+            var that = this;
+
+            viewer.clear()
+            this.pdbId = pdbId;
+
+            pv.io.fetchPdb('http://www.rcsb.org/pdb/files/' + pdbId + '.pdb', function(structure) {
+                // render everything as helix/sheet/coil cartoon, coloring by secondary 
+                // structure succession
+                var go = viewer.renderAs('structure', structure, that.render, {
+                    color: that._color(),
+                    showRelated: '1',
+                });
+
+                // find camera orientation such that the molecules biggest extents are 
+                // aligned to the screen plane.
+                var rotation = pv.viewpoint.principalAxes(go);
+                viewer.setRotation(rotation)
+                viewer.spin(that.spin)
+
+                // adapt zoom level to contain the whole structure
+                viewer.autoZoom()
+            });
+        }
+    },
+    /**
+     * get the coloring method of how to draw the element
+     */
+    _color: function() {
+        var pv = require("bio-pv")
+        switch (this.color) {
+            case "byChain":
+                return pv.color.byChain();
+            case "bySS":
+                return pv.color.bySS();
+            case "rainbow":
+                return pv.color.rainbow();
+            case "uniform":
+                return pv.color.uniform();
+            case "byElement":
+                return pv.color.byElement();
+            default:
+                return pv.color.ssSuccession();
+        }
+    },
+    /**
+     * get the viewer and play with bio-pv's interface
+     * methods documentation <a href="http://pv.readthedocs.org/en/v1.8.1/viewer.html">here</a>
+     */
+    getViewer: function() {
+        return this.viewer;
+    },
+    /**
+     * get bio-pv's full library
+     * read the documentation <a href="http://pv.readthedocs.org/en/v1.8.1/index.html">here</a>
+     */
+    getPv: function() {
+        return this.pv;
+    }
+});
+</script>

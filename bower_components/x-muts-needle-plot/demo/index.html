@@ -1,0 +1,25 @@
+<!doctype html>
+<!--
+@license
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>x-muts-needle-plot Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../x-muts-needle-plot.html">
+    <link rel="import" href="../x-muts-needle-plot-region.html">
+
+  </head>
+  <body unresolved>
+
+    <p>An example of <code>&lt;x-muts-needle-plot&gt;</code>:</p>
+
+    <x-muts-needle-plot x-legend="TP53 Amino Acid sequence (ENST00000269305)" y-legend="# of mutations in TP53 in ovarian cancer">
+      <x-muts-needle-plot-region name="P53" coord="120-300"></x-muts-needle-plot-region>
+      <x-muts-needle-plot-region name="GENE2" coord="20-100"></x-muts-needle-plot-region>
+    </x-muts-needle-plot>
+
+  </body>
+</html>
